@@ -8,7 +8,7 @@ const path = require('path')
 
 const app = express()
 
-app.engine('hbs', expressHbs())
+app.engine('hbs', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: "main-layout", extname: 'hbs'}))
 app.set('view engine', 'hbs')  // расширение файлов
 app.set('views', 'views')
 
