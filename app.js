@@ -1,10 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
-// const open = require('open');
 const path = require('path')
 
-// open('http://localhost:3000');
 
 const app = express()
 
@@ -25,7 +23,9 @@ app.use(shopRoutes)
 app.use(ErrController.catchErr)
 
 
-app.listen(3000)
+app.listen(3000, () => {
+    console.log(`\x1b[1;34mStart on http://localhost:3000/`)
+})
 
 
 
