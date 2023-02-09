@@ -1,6 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const expressHbs = require('express-handlebars')
+
 // const open = require('open');
 const path = require('path')
 
@@ -8,8 +8,8 @@ const path = require('path')
 
 const app = express()
 
-app.engine('hbs', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: "main-layout", extname: 'hbs'}))
-app.set('view engine', 'hbs')  // расширение файлов
+
+app.set('view engine', 'ejs')  // расширение файлов
 app.set('views', 'views')
 
 const adminData = require('./routes/admin')
