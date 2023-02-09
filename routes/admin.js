@@ -7,7 +7,7 @@ const path = require('path')
 const products = []
 
 router.get('/add-product', (req, res, next) => {
-	res.render('add-product', { docTitle: 'Add products' })
+	res.render('add-product', { docTitle: 'Add products', path: "/admin/add-product"})
 })
 
 router.post('/add-product', (req, res, next) => {
