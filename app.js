@@ -24,7 +24,7 @@ app.use(ErrController.catchErr)
 
 
 app.listen(3000, () => {
-    console.log(`\x1b[1;34mStart on http://localhost:3000/`)
+    console.log(`\x1b[1;34mStart on \u001B[33mhttp://localhost:3000/\u001B[0m`)
 })
 
 
