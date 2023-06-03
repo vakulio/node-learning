@@ -55,40 +55,17 @@ exports.getIndex = (req, res, next) => {
 //     .catch((err) => console.log);
 // };
 
-// exports.postCart = (req, res, next) => {
-//   const prodId = req.body.productId;
-//   let newQuantity = 1;
-//   let fetchedCart;
-//   req.user
-//     .getCart()
-//     .then((cart) => {
-//       fetchedCart = cart;
-//       return cart
-//         .getProducts({ where: { id: prodId } })
-//         .then((products) => {
-//           let product;
-//           if (products.length > 0) {
-//             product = products[0];
-//           }
+exports.postCart = (req, res, next) => {
+  const prodId = req.body.productId;
+  Product.findById(prodId)
+    .then((product) => {
+      return req.user.addToCard(product);
+    }).then(result => {
+      console.log(result);
 
-//           if (product) {
-//             const oldQuantity = product.cartItem.quantity;
-//             newQuantity = oldQuantity + 1;
-//             return product;
-//           }
-//           return Product.findByPk(prodId);
-//         })
-//         .then((product) => {
-//           return fetchedCart.addProduct(product, {
-//             through: { quantity: newQuantity },
-//           });
-//         });
-//     })
-//     .then(() => {
-//       res.redirect("/cart");
-//     })
-//     .catch((err) => console.log);
-// };
+    }).catch(err => { throw err });
+};
+
 
 // exports.postCardDeleteItem = (req, res, next) => {
 //   const prodId = req.body.productId;
