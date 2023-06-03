@@ -23,4 +23,12 @@
     margin: 0;
   }
   
-  
+  .btn-cart {
+    color: red;
+    border-color: red;
+  }
+
+  .btn-cart:hover {
+    background-color: red;
+    color: white;
+  }
