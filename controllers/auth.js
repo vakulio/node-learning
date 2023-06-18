@@ -1,12 +1,24 @@
 const bcrypt = require('bcryptjs');
-
 const User = require('../models/user');
+
+var nodemailer = require('nodemailer');
+var transport = nodemailer.createTransport({
+  host: "sandbox.smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: "c1bf3202c1ddc7",
+    pass: "888323edf3c76e"
+  }
+});
+
+
+
 
 exports.getLogin = (req, res, next) => {
   res.render('auth/login', {
     path: '/login',
     pageTitle: 'Login',
-    isAuthenticated: false
+    errorMessage: req.flash('error')
   });
 };
 
@@ -14,7 +26,7 @@ exports.getSignup = (req, res, next) => {
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Signup',
-    isAuthenticated: false
+    errorMessage: req.flash('error')
   });
 };
 
@@ -24,6 +36,7 @@ exports.postLogin = (req, res, next) => {
   User.findOne({ email: email })
     .then(user => {
       if (!user) {
+        req.flash('error', 'Invalid email or password.');
         return res.redirect('/login');
       }
       bcrypt
@@ -37,6 +50,7 @@ exports.postLogin = (req, res, next) => {
               res.redirect('/');
             });
           }
+          req.flash('error', 'Invalid email or password.');
           res.redirect('/login');
         })
         .catch(err => {
@@ -54,6 +68,7 @@ exports.postSignup = (req, res, next) => {
   User.findOne({ email: email })
     .then(userDoc => {
       if (userDoc) {
+        req.flash('error', 'Email exists already, please pick a different one.');
         return res.redirect('/signup');
       }
       return bcrypt
@@ -67,6 +82,18 @@ exports.postSignup = (req, res, next) => {
           return user.save();
         })
         .then(result => {
+          return transport.sendMail({
+            from: '"Node learning" <node@example.com>',
+            to: email,
+            subject: 'Signup succeeded!',
+            html: '<h1>You successfully signed up!</h1>',
+          }, (error, info) => {
+            if (error) {
+              return console.log(error);
+            }
+            console.log('Message sent: %s', info.messageId);
+          });
+        }).then(result => {
           res.redirect('/login');
         });
     })
