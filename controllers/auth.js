@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const crypto = require('crypto');
-const { validationResult, check } = require('express-validator')
+const { validationResult } = require('express-validator')
+const { errHeandling } = require('../util/path')
 
 var nodemailer = require('nodemailer');
 var transport = nodemailer.createTransport({
@@ -19,16 +20,17 @@ exports.getLogin = (req, res, next) => {
     path: '/login',
     pageTitle: 'Login',
     errorMessage: req.flash('error'),
-    oldInput: {email: '', password: ''}
+    oldInput: { email: '', password: '' }
   });
 };
 
-exports.getSignup = (req, res, next) => {''
+exports.getSignup = (req, res, next) => {
+  ''
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Signup',
     errorMessage: req.flash('error'),
-    oldInput: {email: '', password: '', confirmPassword: ''}
+    oldInput: { email: '', password: '', confirmPassword: '' }
   });
 };
 
@@ -41,7 +43,7 @@ exports.postLogin = (req, res, next) => {
       path: '/login',
       pageTitle: 'Login',
       errorMessage: errors.array()[0].msg,
-      oldInput: {email: email, password: password}
+      oldInput: { email: email, password: password }
     });
   }
   User.findOne({ email: email })
@@ -69,7 +71,7 @@ exports.postLogin = (req, res, next) => {
           res.redirect('/login');
         });
     })
-    .catch(err => console.log(err));
+    .catch(err => { return next(errHeandling(err)) });
 };
 
 exports.postSignup = (req, res, next) => {
@@ -81,7 +83,7 @@ exports.postSignup = (req, res, next) => {
       path: '/signup',
       pageTitle: 'Signup',
       errorMessage: errors.array()[0].msg,
-      oldInput: {email: email, password: password, confirmPassword: req.body.confirmPassword}
+      oldInput: { email: email, password: password, confirmPassword: req.body.confirmPassword }
     });
   }
   return bcrypt
@@ -109,9 +111,7 @@ exports.postSignup = (req, res, next) => {
     }).then(result => {
       res.redirect('/login');
     })
-    .catch(err => {
-      console.log(err);
-    });
+    .catch(err => { return next(errHeandling(err)) });
 };
 
 exports.postLogout = (req, res, next) => {
@@ -160,7 +160,7 @@ exports.postReset = (req, res, next) => {
           `
         });
       })
-      .catch(err => { console.log(err) })
+      .catch(err => { return next(errHeandling(err)) })
   });
 }
 
@@ -176,7 +176,7 @@ exports.getNewPassword = (req, res, next) => {
         passwordToken: token
       });
 
-    }).catch(err => { console.log(err) })
+    }).catch(err => { return next(errHeandling(err)) })
 }
 
 
@@ -209,5 +209,5 @@ exports.postNewPassword = (req, res, next) => {
     .then(result => {
       res.redirect('/login');
     })
-    .catch(err => { console.log(err) })
+    .catch(err => { return next(errHeandling(err)) })
 }

@@ -1,5 +1,7 @@
 const Product = require('../models/product')
 
+const { errHeandling } = require('../util/path')
+
 exports.getAddProduct = (req, res, next) => {
 	res.render('admin/edit-product', {
 		pageTitle: 'Add Product',
@@ -28,7 +30,7 @@ exports.postAddProduct = (req, res, next) => {
 			res.redirect('/admin/products')
 		})
 		.catch((err) => {
-			console.log(err)
+			return next(errHeandling(err))
 		})
 }
 
@@ -50,7 +52,9 @@ exports.getEditProduct = (req, res, next) => {
 				product: product
 			})
 		})
-		.catch((err) => console.log(err))
+		.catch((err) => {
+			return next(errHeandling(err))
+		})
 }
 
 exports.postEditProduct = (req, res, next) => {
@@ -59,7 +63,6 @@ exports.postEditProduct = (req, res, next) => {
 	const updatedPrice = req.body.price
 	const updatedImageUrl = req.body.imageUrl
 	const updatedDesc = req.body.description
-
 	Product.findById(prodId)
 		.then((product) => {
 			if (product.userId.toString() !== req.user._id.toString()) {
@@ -74,11 +77,13 @@ exports.postEditProduct = (req, res, next) => {
 				res.redirect('/admin/products')
 			})
 		})
-		.catch((err) => console.log(err))
+		.catch((err) => {
+			return next(errHeandling(err))
+		})
 }
 
 exports.getProducts = (req, res, next) => {
-	Product.find({userId: req.user._id})
+	Product.find({ userId: req.user._id })
 		// .select('title price -_id')
 		// .populate('userId', 'name')
 		.then((products) => {
@@ -89,7 +94,7 @@ exports.getProducts = (req, res, next) => {
 				path: '/admin/products'
 			})
 		})
-		.catch((err) => console.log(err))
+		.catch((err) => { return next(errHeandling(err)) })
 }
 
 exports.postDeleteProduct = (req, res, next) => {
@@ -99,5 +104,5 @@ exports.postDeleteProduct = (req, res, next) => {
 			console.log('DESTROYED PRODUCT')
 			res.redirect('/admin/products')
 		})
-		.catch((err) => console.log(err))
+		.catch((err) => { return next(errHeandling(err)) })
 }
