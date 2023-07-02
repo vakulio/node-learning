@@ -13,7 +13,6 @@ const multer = require('multer')
 const { createHash } = require('node:crypto')
 
 const MONGODB_URI = 'mongodb+srv://vakulio:bI8CAHnMlXlvJ1XY@node-learning.ey3k7eo.mongodb.net/shop'
-const hash = createHash('sha256')
 const app = express()
 const store = new MongoDBStore({
 	uri: MONGODB_URI,
@@ -26,7 +25,7 @@ const fileStorage = multer.diskStorage({
 		cb(null, 'images')
 	},
 	filename: (req, file, cb) => {
-		cb(null, hash.digest('hex') + '-' + file.originalname)
+		cb(null, createHash('sha256').digest('hex') + '-' + file.originalname)
 	}
 })
 
