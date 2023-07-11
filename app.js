@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const feedRoutes = require('./routes/feed');
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 const app = express();
 
@@ -15,10 +17,17 @@ app.use((req, res, next) => {
 
 app.use("/feed", feedRoutes)
 
-
-
 const port = 8080;
-app.listen(port, () => {
-    console.log(`\x1b[34mServer is running on port ${port}`)
-})
+
+mongoose.connect(process.env.MONGODB_URI)
+.then(result => {
+    app.listen(port, () => {
+        console.log(`\x1b[34mServer is running on port ${port}`)
+    })
+}).catch(err => console.log(err))
+
+
+
+// app.listen(8080, () => console.log(`\x1b[34mServer is running on port ${port}
+
 
