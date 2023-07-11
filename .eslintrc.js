@@ -21,6 +21,7 @@ module.exports = {
     ],
     'one-var': [
       'off'
-    ]
+    ],
+    'no-param-reassign': 'off'
   }
 };
