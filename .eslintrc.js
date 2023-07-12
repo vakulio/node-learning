@@ -22,6 +22,8 @@ module.exports = {
     'one-var': [
       'off'
     ],
-    'no-param-reassign': 'off'
+    'no-param-reassign': 'off',
+    'linebreak-style': 'off',
+    'no-underscore-dangle': 'off'
   }
 };
