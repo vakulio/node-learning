@@ -15,6 +15,7 @@ module.exports = {
     'one-var': ['off'],
     'no-param-reassign': 'off',
     'linebreak-style': 'off',
-    'no-underscore-dangle': 'off'
+    'no-underscore-dangle': 'off',
+    'implicit-arrow-linebreak': ['error', 'beside']
   }
 };

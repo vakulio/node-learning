@@ -11,10 +11,12 @@ router.put(
     body('email')
       .isEmail()
       .withMessage('Please enter a valid email')
-      .custom((value, { req }) => User.findOne({ email: value }).then((userDoc) => {
-        // eslint-disable-next-line prefer-promise-reject-errors
-        if (userDoc) Promise.reject('Email address already exists!');
-      }))
+      .custom((value, { req }) =>
+        User.findOne({ email: value }).then((userDoc) => {
+          // eslint-disable-next-line prefer-promise-reject-errors
+          if (userDoc) Promise.reject('Email address already exists!');
+        })
+      )
       .normalizeEmail(),
     body('password').trim().isLength({ min: 5 }),
     body('name').trim().not().isEmpty()
