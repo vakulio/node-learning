@@ -131,7 +131,9 @@ exports.updatePost = (req, res, next) => {
       post.content = content;
       return post.save();
     })
-    .then((result) => res.status(200).json({ message: 'Post updated', post: result }))
+    .then((result) =>
+      res.status(200).json({ message: 'Post updated', post: result })
+    )
     .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500;

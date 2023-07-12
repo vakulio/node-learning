@@ -16,6 +16,8 @@ module.exports = {
     'no-param-reassign': 'off',
     'linebreak-style': 'off',
     'no-underscore-dangle': 'off',
-    'implicit-arrow-linebreak': ['error', 'beside']
+    'implicit-arrow-linebreak': 'off',
+    'function-paren-newline': 'off',
+    'operator-linebreak': ['error', 'after']
   }
 };

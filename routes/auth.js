@@ -5,6 +5,7 @@ const User = require('../models/user');
 
 const router = express.Router();
 
+// PUT /auth/signup
 router.put(
   '/signup',
   [
@@ -24,6 +25,7 @@ router.put(
   userControllers.signup
 );
 
+// POST /auth/login
 router.post('/login', userControllers.login);
 
 module.exports = router;
