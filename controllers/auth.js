@@ -12,7 +12,8 @@ exports.signup = (req, res, next) => {
     throw error;
   }
   const { password, name, email } = req.body;
-  bcrypt.hash(password, 12)
+  bcrypt
+    .hash(password, 12)
     .then((hashedPw) => {
       const user = new User({
         email,
@@ -20,17 +21,16 @@ exports.signup = (req, res, next) => {
         name
       });
       return user.save();
-    }).then((result) => {
+    })
+    .then((result) => {
       res.status(201).json({ message: 'User created!', userId: result._id });
     })
-    .catch(
-      (err) => {
-        if (!err.statusCode) {
-          err.statusCode = 500;
-        }
-        next(err);
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
       }
-    );
+      next(err);
+    });
 };
 
 exports.login = (req, res, next) => {

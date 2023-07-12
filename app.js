@@ -20,7 +20,11 @@ const storage = multer.diskStorage({
   }
 });
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+  if (
+    file.mimetype === 'image/png'
+    || file.mimetype === 'image/jpg'
+    || file.mimetype === 'image/jpeg'
+  ) {
     cb(null, true);
   } else {
     cb(null, false);
@@ -35,7 +39,10 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, PATCH, DELETE'
+  );
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
@@ -53,9 +60,11 @@ app.use((error, req, res, next) => {
 
 const port = 8080;
 
-mongoose.connect(`${process.env.MONGODB_URI}posts`)
+mongoose
+  .connect(`${process.env.MONGODB_URI}posts`)
   .then((result) => {
     app.listen(port, () => {
       console.log(`\u001B[35mServer is running on port ${port}`);
     });
-  }).catch((err) => console.log(err));
+  })
+  .catch((err) => console.log(err));

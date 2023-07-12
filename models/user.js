@@ -19,10 +19,12 @@ const userSchema = new Schena({
     type: String,
     default: 'I am new!'
   },
-  posts: [{
-    type: Schena.Types.ObjectId,
-    ref: 'Post'
-  }]
+  posts: [
+    {
+      type: Schena.Types.ObjectId,
+      ref: 'Post'
+    }
+  ]
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -52,9 +52,13 @@ exports.createPosts = (req, res, next) => {
   const imageUrl = req.file.path.replace('\\', '/');
   // Create post in db
   const post = new Post({
-    title, content, creator: { name: 'Vakulio' }, imageUrl
+    title,
+    content,
+    creator: { name: 'Vakulio' },
+    imageUrl
   });
-  post.save()
+  post
+    .save()
     .then((result) => {
       console.log(result);
       res.status(201).json({
@@ -126,7 +130,9 @@ exports.updatePost = (req, res, next) => {
       post.imageUrl = imageUrl;
       post.content = content;
       return post.save();
-    }).then((result) => res.status(200).json({ message: 'Post updated', post: result })).catch((err) => {
+    })
+    .then((result) => res.status(200).json({ message: 'Post updated', post: result }))
+    .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500;
       }

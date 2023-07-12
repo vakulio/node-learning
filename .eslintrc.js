@@ -9,19 +9,10 @@ module.exports = {
     ecmaVersion: 'latest'
   },
   rules: {
-    'comma-dangle': [
-      'error',
-      'never'
-    ],
-    'no-unused-vars': [
-      'warn'
-    ],
-    'no-var': [
-      'off'
-    ],
-    'one-var': [
-      'off'
-    ],
+    'comma-dangle': ['error', 'never'],
+    'no-unused-vars': ['warn'],
+    'no-var': ['off'],
+    'one-var': ['off'],
     'no-param-reassign': 'off',
     'linebreak-style': 'off',
     'no-underscore-dangle': 'off'
