@@ -17,8 +17,8 @@ const postSchema = new Schena(
       required: true
     },
     creator: {
-      // type: Schena.Types.ObjectId,
-      type: Object,
+      type: Schena.Types.ObjectId,
+      ref: 'User',
       required: true
     }
   },

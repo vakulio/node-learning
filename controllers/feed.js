@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 const fs = require('fs');
 const path = require('path');
 const Post = require('../models/post');
+const User = require('../models/user');
 
 const clearImage = (filePath) => {
   filePath = path.join(__dirname, '..', filePath);
@@ -49,21 +50,26 @@ exports.createPosts = (req, res, next) => {
   }
   const { title } = req.body;
   const { content } = req.body;
+  let creator;
   const imageUrl = req.file.path.replace('\\', '/');
-  // Create post in db
+
   const post = new Post({
     title,
     content,
-    creator: { name: 'Vakulio' },
+    creator: req.userId,
     imageUrl
   });
   post
     .save()
-    .then((result) => {
-      console.log(result);
+    .then((result) => User.findById(req.userId))
+    .then((user) => {
+      creator = user;
+      user.posts.push(post);
+      return user.save();
+    }).then((result) => {
       res.status(201).json({
         message: 'Post was created',
-        post: result
+        post
       });
     })
     .catch((error) => {
@@ -106,10 +112,8 @@ exports.updatePost = (req, res, next) => {
   }
   const { title, content } = req.body;
   let imageUrl = req.body.image;
-  console.log(imageUrl);
   if (req.file) {
     imageUrl = req.file.path.replace('\\', '/');
-    console.log(imageUrl);
   }
   if (!imageUrl) {
     const error = new Error('No file picked.');
@@ -121,6 +125,11 @@ exports.updatePost = (req, res, next) => {
       if (!post) {
         const error = new Error('Could not find post.');
         error.statusCode = 404;
+        throw error;
+      }
+      if (post.creator.toString() !== req.userId) {
+        const error = new Error('Not authorized!');
+        error.statusCode = 403;
         throw error;
       }
       if (imageUrl !== post.imageUrl) {
@@ -151,8 +160,18 @@ exports.deletePost = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
+      if (post.creator.toString() !== req.userId) {
+        const error = new Error('Not authorized!');
+        error.statusCode = 403;
+        throw error;
+      }
       clearImage(post.imageUrl);
       return Post.findByIdAndRemove(id);
+    })
+    .then((result) => User.findById(req.userId))
+    .then((user) => {
+      user.posts.pull(id);
+      return user.save();
     })
     .then((result) => res.status(200).json({ message: 'Post deleted' }))
     .catch((err) => {
