@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a Node.js REST API project.
+This is an educational project for learning Node.js. It serves as a REST API.
 
 ## Installation
 
