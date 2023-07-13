@@ -66,7 +66,8 @@ exports.createPosts = (req, res, next) => {
       creator = user;
       user.posts.push(post);
       return user.save();
-    }).then((result) => {
+    })
+    .then((result) => {
       res.status(201).json({
         message: 'Post was created',
         post
